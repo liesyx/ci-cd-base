@@ -11,8 +11,7 @@ pipeline {
     CHART_DIR  = 'helm/cicd-demo'
     // ======================
 
-    // docker, kubectl, helm live in the persistent Jenkins volume
-    PATH = "/var/jenkins_home/bin:${env.PATH}"
+    // docker + helm are baked into the Jenkins image; docker talks to the DinD sidecar
     DOCKER_BUILDKIT = '1'
   }
 
@@ -86,7 +85,7 @@ pipeline {
               --history-max 10
 
             helm -n $NAMESPACE history $RELEASE --max 5
-            kubectl -n $NAMESPACE get pods -l app.kubernetes.io/instance=$RELEASE
+            helm -n $NAMESPACE status $RELEASE
           '''
         }
       }
@@ -95,7 +94,7 @@ pipeline {
 
   post {
     always {
-      // free disk on the host: remove local copies built in this run
+      // free disk in the DinD daemon: remove images built in this run
       sh 'docker rmi $IMAGE:test-$IMAGE_TAG $IMAGE:$IMAGE_TAG $IMAGE:latest 2>/dev/null || true'
     }
     success {
