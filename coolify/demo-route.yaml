@@ -1,0 +1,22 @@
+# Traefik dynamic config for Coolify proxy.
+# Put in Coolify UI: Servers -> localhost -> Proxy -> Dynamic Configurations -> Add
+# (or file: /data/coolify/proxy/dynamic/cicd-demo.yaml)
+http:
+  routers:
+    cicd-demo-http:
+      rule: Host(`demo.oci.lexsy.pro.vn`)
+      entryPoints: [http]
+      middlewares: [redirect-to-https]
+      service: cicd-demo
+    cicd-demo-https:
+      rule: Host(`demo.oci.lexsy.pro.vn`)
+      entryPoints: [https]
+      service: cicd-demo
+      tls:
+        certResolver: letsencrypt
+  services:
+    cicd-demo:
+      loadBalancer:
+        servers:
+          # k3s node IP + NodePort from k8s/service.yaml
+          - url: http://10.0.0.47:30080

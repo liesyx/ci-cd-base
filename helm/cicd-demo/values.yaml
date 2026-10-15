@@ -1,0 +1,27 @@
+replicaCount: 1
+
+image:
+  repository: harbor.oci.lexsy.pro.vn/cicd/cicd-demo
+  tag: latest            # Jenkins overrides with --set image.tag=<build>
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: harbor-cred    # created by k8s/setup-once.sh
+
+appVersion: v1           # shown on the page (APP_VERSION env)
+
+service:
+  port: 80
+  # Must be inside the k3s NodePort range 30000-30999.
+  # Coolify proxy routes demo.oci.lexsy.pro.vn -> 10.0.0.47:30080
+  nodePort: 30080
+
+containerPort: 3000
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

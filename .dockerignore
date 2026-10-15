@@ -1,0 +1,8 @@
+node_modules
+.git
+Jenkinsfile
+k8s
+helm
+coolify
+jenkins-tools.sh
+*.md
