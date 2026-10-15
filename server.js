@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
     <html>
       <head><title>Hello CI/CD</title></head>
       <body style="font-family: sans-serif; text-align: center; padding-top: 80px;">
-        <h1>🚀 Hello CI/CD — ${VERSION}</h1>
+        <h1>🚀 Hello IM lexsy — ${VERSION}</h1>
         <p>Deployed to k3s by Jenkins</p>
         <p>Host: ${require('os').hostname()}</p>
       </body>
